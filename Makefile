@@ -6,6 +6,9 @@ BUILD_DIR=bin
 build:
 	go build -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/knmi
 
+build-all:
+	./build-all.sh
+
 test:
 	go test -v ./...
 
