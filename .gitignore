@@ -1,0 +1,4 @@
+.github/
+coverage.out
+bin/
+.env
