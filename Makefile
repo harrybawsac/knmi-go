@@ -49,4 +49,4 @@ migrate: build
 sync: build
 	./$(BUILD_DIR)/$(BINARY_NAME) sync
 
-all: fmt lint vet test build
+all: fmt lint vet test build-all

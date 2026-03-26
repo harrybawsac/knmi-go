@@ -180,6 +180,23 @@ func runSync(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("no migrations applied. Run 'knmi migrate' first")
 	}
 
+	// Filter to only new records based on latest date in DB
+	latestDate, err := repo.GetLatestDate()
+	if err != nil {
+		return fmt.Errorf("getting latest date: %w", err)
+	}
+	if latestDate != nil {
+		LogVerbose("Latest record in DB: %s", latestDate.Format("2006-01-02"))
+		var newRecords []parser.WeatherRecord
+		for _, rec := range records {
+			if rec.Date.After(*latestDate) {
+				newRecords = append(newRecords, rec)
+			}
+		}
+		LogVerbose("Filtered %d records to %d new records", len(records), len(newRecords))
+		records = newRecords
+	}
+
 	// Insert records
 	LogVerbose("Inserting records...")
 	result, err := repo.InsertRecords(records)
